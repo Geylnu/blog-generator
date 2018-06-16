@@ -99,7 +99,7 @@ function (currentValue,index,array){
 }
 ```
 #### `.map()`
-和forEach差不多，至少对value的改变会以新数组的形式返回
+和forEach差不多，不过对value的改变会以新数组的形式返回
 
 #### `a.filter()`
 和map差不过，就是筛选，ture要，false不要
