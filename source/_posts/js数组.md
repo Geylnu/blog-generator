@@ -58,7 +58,7 @@ new Function('a','b','a+b')
 # 具体怎么用？
 ## 构造函数
 Array()构造函数会根据传入的不同参数返回不同的数组
-1. `let a = Arrray(1)`
+1. `let a = Array(1)`
     当参数只有一个数字的情况，参数代表数组的长度，返回等于参数长度的数组，这个数组其它元素都没有被声明，包括`0 in a`，它返回undefined。
 
     请注意，传入NaN会报错
@@ -72,13 +72,14 @@ Array()构造函数会根据传入的不同参数返回不同的数组
 ## 方法
 
 ###  string.prototype
-* `.trim()`
-* `.spli()` 分解
+* `.trim()` 返回一个去掉两端空格的新字符串
+* `.spli()` 返回一个分割后的新字符串
 
 ### Array.prototype
 `.push()` 推入一个(末尾)
 `.pop()` 弹出一个(末尾)
-`.shift()`
+`.shift()` 删除数组头部元素
+`.unshift` 添加到头部
 `.join()` 把数组连接起来，并加上分隔符形成字符串返回，默认为`,`号
 `.concat(b)` 把数组连接起来返回新数组，也可以和空数组合并，等同于数组复制
 `.forEach()` 遍历数组，详见后文
@@ -87,7 +88,7 @@ Array()构造函数会根据传入的不同参数返回不同的数组
 Array的关键是继承了`Array.prototype`
 
 ### 数组遍历
-如果是数组，可以使用`for(let i-0;i<obj.length;i++>)`
+如果是数组，可以使用`for(let i=0;i<obj.length;i++>)`
 如果不关心是否是数组，可以使用`for (let i in obj)`遍历所有键值
 还可以使用`forEach()`，`.map()`遍历
 
@@ -105,8 +106,9 @@ function (currentValue,index,array){
 和map差不过，就是筛选，ture要，false不要
 
 #### `.reduce()`
+每次会把函数的返回值作为下一次的返回值，还可以指定初始索引，最后返回最后执行后的函数返回值
 ``` js
-a.reduce( function (sum,n){return sum+=n},0) //返回6
+a.reduce( function (sum,n){return sum+=n},0) //返回6，0为初始索引
 ```
 
 ### `a.sort()`

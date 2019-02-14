@@ -38,14 +38,15 @@ myButton.addEventListener('click',()=>{
 
 网络响应的时间会很长，这段时间已经够javaScript执行很多任务了，所以需要使用异步
 
-readystate
-值|描述
-:--:|:--:
-0|`open()`方法还没有被调用
-1|`send()`方法还没有被调用
-2|`send()`方法已被调用，响应头和响应状态码已经返回
-3|正在下载响应体
-4|请求全部完成
+**readystate**
+
+|值|描述|
+|:--:|:--:|
+|0|`open()`方法还没有被调用
+|1|`send()`方法还没有被调用
+|2|`send()`方法已被调用，响应头和响应状态码已经返回
+|3|正在下载响应体
+|4|请求全部完成
 
 onreadystate 要注意放在前面
 
@@ -57,12 +58,12 @@ onreadystate 要注意放在前面
 后来道格拉斯·克罗克福发明了一种轻量的资料语言[JSON](https://zh.wikipedia.org/zh-hans/JSON)
 
 ### JSON语法
-JSON支持`object` `array`两种数据组织方式，值支持`string``number``object``array``true``false``null`
+JSON支持`object` `array`两种数据组织方式，值支持`string` `number` `object` `array` `true` `false` `null`
 没有`undefined`
 
 json没有变量，不支持引用，没有原型链
 * string 必须具有`""`
-支持转意0符`\\`
+支持转义符`\\`
 
 注意，永远返回的是字符串，只是将其解析为对象
 解析:`JSON.parse(string)`

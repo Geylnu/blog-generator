@@ -24,7 +24,7 @@ Element、Document、Text都继承自node，其它结点还有注释结点`Comme
 7|注释
 9|document
 10|声明文档类型的标签
-11|
+11|虚拟DOM
 
 ## 属性
 ### nodeName
@@ -54,23 +54,20 @@ Element、Document、Text都继承自node，其它结点还有注释结点`Comme
 ### insertBefore()
 插入人到元素前面
 ### isEqualNode()
-基本一样
+元素类型、内容、属性完全一致
 ### isSanmeNode()
 同一元素
 ### removeChild()
-杀掉儿子，还是会在内存中，可能不会释放内存占用
-### replaceChild()
-替换成指定的儿子
+从DOM树中移除，等待被垃圾回收
+### replaceChild(newChild,oldChild)
+替换成指定的子节点
 ### normalize()
-常规化，把元素不正常的情况正常化
+常规化，在一个"规范化"后的DOM树中，不存在一个空的文本节点，或者两个相邻的文本节点。
 
 # Document接口
 ## 属性
-### anchors
-获得所有a标签，html5被弃用
-原因:由于向后兼容原因，该属性只返回拥有name属性的a元素，而不是拥有id属性的a元素
-
 ### body
+包含当前页面的元素
 ### characterSet
 返回使用的字符编码
 
@@ -108,10 +105,10 @@ Element、Document、Text都继承自node，其它结点还有注释结点`Comme
 ## 方法
 
 ### close()
-页面加载完毕后关闭
+页面加载完毕后自动关闭
 
 ### write()
-向文档内写入东西，如在open时调用write会向文档追加内容，如果已经关闭了调用write会**重写documentn的内容**，这**十分危险！** 不要再任何**异步**或者**延时性**的操作上使用write
+向文档内写入东西，如在open时调用write会向文档追加内容，如果已经关闭了调用write会**重写documentn的内容**，这**十分危险！** 不能在任何**异步**或者**延时性**的操作上使用write
 
 ### writeln()
 写一行
@@ -136,9 +133,25 @@ Element、Document、Text都继承自node，其它结点还有注释结点`Comme
 返回找到的第一个元素
 ### querySelectorAll()
 以伪数组的形式返回符合的所有元素
-### registerElement()
 
 # Element
 ## 属性
 ### innerHTML
 其中的HTML，被改写有安全风险
+
+# 一些其它需要注意的点
+看下面的代码
+``` js
+var parent = document.getElementById('parent');
+parent.childNodes.length // 2
+parent.appendChild(document.createElement('div'));
+parent.childNodes.length // 3
+```
+``` js
+var allDiv = document.querySelectorAll('div')
+allDiv.length // 假设是 2
+document.body.appendChild(  document.createElement('div')  )
+allDiv.length // 还是2
+```
+这里length没有改变时因为`parent.childNodes`是动态集合。所谓动态集合就是一个活的集合，DOM树删除或新增一个相关节点，都会立刻反映在NodeList接口之中。
+ `document.querySelectorAll`方法返回的是一个静态集合(伪数组)。DOM内部的变化，并不会实时反映在该方法的返回结果之中。
