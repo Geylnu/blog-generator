@@ -30,9 +30,12 @@ Jesse James Garrett 将一下技术取名AJAX（异步的javaScript和 XML
 myButton.addEventListener('click',()=>{
     let request = new XMLHttpRequest()
     request.open('GET','/XXX') //初始化配置  请求方式忽略大小写  默认异步
-    // request.onreadystatechange
+    request.onreadystatechange = ()=>{
+        if (request.readyState === 4 && request.status === 200){
+            console.log(request.responseText) //响应内容
+        }
+    }
     request.send() //发送
-    console.log(request.responseText) //响应内容
 })
 ```
 

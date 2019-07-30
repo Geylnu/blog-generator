@@ -84,6 +84,10 @@ document.cookie = 'xxx=hihihi'
 
 不过和cookie不同的是LocalStorage不会跟随请求发送，仅限通过浏览器api操作，储存空间一般为5M大小，远大于cookie可以使用的空间，并且没有过期期限，除非用户主动清理会一直存在，通常在能用LocalStorage的地方尽量都用LocalStorage，前端不应该使用Cookie。
 
+# sessionStorage
+sessionStorage与LocalStorage基本相同，只是sessionStorage过期不同，另外还有个显著的特点：sessionStorage会在每个窗口创建时初始化一个新的会话，也就是即使是同一个域名下不同窗口，sessionStorage也是不一样的。
+
+
 ## js操作方式
 
 ``` js
