@@ -8,7 +8,7 @@ categories: JavaScript
 ---
 # 1. 起因
 最近想制作一个在散开的纸面画画的效果，纸面会按一定角度倾斜，就像下面这样↓
-![canvas](./canvas.png)
+![canvas](http://cdn.geylnu.com/canvas.png)
 也就是给canvas元素加了`transform: roate(-2deg)`
 
 # 2. 电脑端实现
@@ -54,7 +54,7 @@ canvas.addEventListener('touchmove',(e)=>{
 
 ## 3.2 偏移原因
 偏移原因是因为变换后，元素的坐标轴已经改变了，而我们得到的坐标还是变换前的坐标，自然而然就发生错误了。
-![坐标图](./reason.png)
+![坐标图](http://cdn.geylnu.com/reason.png)
 如图所示，实际触摸点是绿色，本应也绘制在绿色坐标点，但是我们现在的坐标系仍然是之前的坐标系，就导致了绘制点相对于原来的坐标点绘制，也即紫色，导致绘制偏移。
 解决办法也很简单，将触摸点按照新坐标系计算得到值，就是真实的相对坐标了。
 **步骤：**
@@ -70,48 +70,44 @@ canvas.addEventListener('touchmove',(e)=>{
 let style = window.getComputedStyle(el)
 console.log(style) 
 ```
-    获得的`transform`属性如下
-    ``` 
-    transform: "matrix(0.999391, -0.0348995, 0.0348995, 0.999391, 0, 0)"
-    transformBox: "view-box"
-    transformOrigin: "160px 240px"
-    transformStyle: "flat"
-    ```
-    关于`transform:matrix`以及如何理解查看[张鑫旭的文章](https://www.zhangxinxu.com/wordpress/2012/06/css3-transform-matrix-%E7%9F%A9%E9%98%B5/)。
-    简而言之，就是`transform`属性都是通过`transform:matrix`进行矩阵计算得到坐标的。
+获得的`transform`属性如下
+``` 
+transform: "matrix(0.999391, -0.0348995, 0.0348995, 0.999391, 0, 0)"
+transformBox: "view-box"
+transformOrigin: "160px 240px"
+transformStyle: "flat"
+```
+关于`transform:matrix`以及如何理解查看[张鑫旭的文章](https://www.zhangxinxu.com/wordpress/2012/06/css3-transform-matrix-%E7%9F%A9%E9%98%B5/)。
+简而言之，就是`transform`属性都是通过`transform:matrix`进行矩阵计算得到坐标的。
 
 2. 解析transform属性
-    由于这里涉及到矩阵运算，需要引入[math.js](https://mathjs.org/)
-
-    ``` js
-    let transform = style.transform
-    let transformOrigin = style.transformOrigin
-
-    let origin = { x: 0, y: 0 }
-    let matrix = math.ones([3, 3])
-    if (transform !== 'none') {
-        let originArray = transformOrigin.split(' ')
-        origin.x = parseInt(originArray[0])
-        origin.y = parseInt(originArray[1]) //矩阵的坐标变化是基于变换中心得。
-
-        let matrixString = transform.match(/\(([^)]*)\)/)[1]
-        let stringArray = matrixString.split(',')
-        let temp = []
-        stringArray.forEach((value) => {
-            temp.push(parseFloat(value.trim()))
-        })
-        temp = [
-            [temp[0], temp[2], temp[4]],
-            [temp[1], temp[3], temp[5]],
-            [0, 0, 1],
-        ]
-
-        matrix = math.inv(temp) //进行逆矩阵
-    } else {
-        matrix = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
-    }
-    ```
-    这样我们就得到了原变换矩阵的逆矩阵和变换中心，就能将触摸点正确的还原到原坐标系了
+由于这里涉及到矩阵运算，需要引入[math.js](https://mathjs.org/)
+``` js
+let transform = style.transform
+let transformOrigin = style.transformOrigin
+let origin = { x: 0, y: 0 }
+let matrix = math.ones([3, 3])
+if (transform !== 'none') {
+    let originArray = transformOrigin.split(' ')
+    origin.x = parseInt(originArray[0])
+    origin.y = parseInt(originArray[1]) //矩阵的坐标变化是基于变换中心得。
+    let matrixString = transform.match(/\(([^)]*)\)/)[1]
+    let stringArray = matrixString.split(',')
+    let temp = []
+    stringArray.forEach((value) => {
+        temp.push(parseFloat(value.trim()))
+    })
+    temp = [
+        [temp[0], temp[2], temp[4]],
+        [temp[1], temp[3], temp[5]],
+        [0, 0, 1],
+    ]
+    matrix = math.inv(temp) //进行逆矩阵
+} else {
+    matrix = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
+}
+```
+这样我们就得到了原变换矩阵的逆矩阵和变换中心，就能将触摸点正确的还原到原坐标系了
 
 3. 计算
 ``` js
