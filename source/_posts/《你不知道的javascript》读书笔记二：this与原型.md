@@ -1,5 +1,6 @@
 ---
 title: 《你不知道的javascript》读书笔记二：this与原型
+date: 2020-09-14 20:36:28
 tags:
   - 你不知道的Javascript
   - 读书笔记
@@ -131,7 +132,7 @@ Object.defineProperty(o, "name", {
 默认的内置[[GET]]操作会首先在对象中查找是否有名称相同的属性，如果找到就会返回这个属性的值，如果没有找到，则会遍历原型链上的属性，如果没有则会返回 undefined，
 而默认的[[PUT]]方法则由于原型链的存在复杂很多
 
-在对象自身存在属性时，[[PUT]方法很简单，如果有定义的 setter 就调用 setter，如果没有，就检查属性描述中定义是否可写，如果可写就写入。
+在对象自身存在属性时，[[PUT]]方法很简单，如果有定义的 setter 就调用 setter，如果没有，就检查属性描述中定义是否可写，如果可写就写入。
 
 而如果对象属性不存在，则会涉及到复杂的原型上属性的处理了。
 
@@ -256,7 +257,7 @@ class Child extends Parent {
 }
 
 const child = new Child("kk", 18);
-child.getName(); // kk 18
+child.getName(); // kk 1
 ```
 
 指的注意的是，super 是静态绑定的，super 在声明时就已经确定了。
